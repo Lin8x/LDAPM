@@ -3,10 +3,7 @@
 import os
 import time
 
-one = "-"
-two = "-"
-three = "-"
-four = "-"
+user_options = []
 
 r = '\033[0m'  # reset
 bold = '\033[01m'
@@ -45,13 +42,23 @@ brown = '\33[33m'
 bwhite = '\33[107'
 
 
+def isSelected(value):
+    if (value in user_options):
+        return "X"
+    return value
+
+
+def opt(value, string):
+    return r + "  [" + green + str(value) + r + "] " + string
+
+
 def welcome():
     os.system("clear " * 5)
     print(r + """
-     .---.  
-    /     \\   
-    \\.@-@./   
-    /`\_/`\\   
+     .---.
+    /     \\
+    \\.@-@./
+    /`\_/`\\
    //  _  /\\
   | \     )|\\""" + brown + " \t _____________________________")
     print(""" ▒▒▒▒▒▒▒▒▒▒▒▒▒▒\t   _    ___   _   ___ __  __
@@ -59,17 +66,17 @@ def welcome():
   ░░░░░░░░░░░░ \t  | |__| |) / _ \|  _/ |\/| |
   ░░░░░░░░░░░░ \t  |____|___/_/ \_\_| |_|  |_|
   ░░░░░░░░░░░░ \t _____________________________
-  
+
   (L)inux (D)esktop (A)pplication (P)ackage (M)anager
 
-  """ + r + "1st Main Developer: " + green + "lin8x" + r + " - " + ul + lcyan + "www.github.com/lin8x " + r + "\n  2nd Main Developer: " + green + "asian-code" + r + " - " + ul + lcyan + "www.github.com/asian-code" + r)
+  """ + r + "1st Developer: " + green + "lin8x" + r + " - " + ul + lcyan + "www.github.com/lin8x " + r +
+          "\n  2nd Developer: " + green + "asian-code" + r + " - " + ul + lcyan + "www.github.com/asian-code" + r +
+          "\n  Select the options you would like to use, then type 'start' to continue:\n\n"+opt(isSelected("1"), "Make a Desktop Application\n") +
+          opt(isSelected("2"), "Make a .deb file (DOESN'T WORK ON NFTS!)\n") +
+          opt(isSelected("3"), "Compile your project into a .tar.xz/.zip file\n"))
 
 
-def opt(num, string):
-    print(r + "  [" + green + str(num) + r + "] " + string)
-
-
-def run(one, two, three, four):
+def run():
     sysstuff = "Getting everything setup for you"
     for i in range(0, 4):
         welcome()
@@ -78,7 +85,7 @@ def run(one, two, three, four):
         sysstuff = sysstuff + "."
         time.sleep(1)
     welcome()
-    print("\n" + r + "  --- PRESS ENTER AS DEFAULT ---\n")
+    print("\n" + r + "  ---  ---\n")
 
     project = input(r + "  [" + green + "*" + r +
                     "] Please enter your project name (project): ")
@@ -118,22 +125,24 @@ def run(one, two, three, four):
             time.sleep(1)
         try:
 
-            fil = project+"dir"
+            projectdir = project+"dir"
 
             # makes the directory file
             os.system("mkdir " + directory)
             opt(red + "+", "Made " + directory)
 
             # makes the projectdir file
-            os.system("mkdir " + directory + "/" + project + "dir")
+            os.system("mkdir " + directory + "/" + projectdir)
             opt(red + "+", "Made " + directory + "/" + project)
 
             # moves the projectdir file into the directory file
-            os.system("cp " + script + " " + directory + "/" + fil)
-            opt(red + "+", "Moved " + script + " to " + directory + "/" + fil)
+            os.system("cp " + script + " " + directory + "/" + projectdir)
+            opt(red + "+", "Moved " + script +
+                " to " + directory + "/" + projectdir)
 
-            os.system("cp " + image + " " + directory + "/" + fil)
-            opt(red + "+", "Moved " + image + " to " + directory + "/" + fil)
+            os.system("cp " + image + " " + directory + "/" + projectdir)
+            opt(red + "+", "Moved " + image +
+                " to " + directory + "/" + projectdir)
 
             os.system("touch " + project)
             opt(red + "+", "Made the batch file called " + project)
@@ -160,6 +169,7 @@ def run(one, two, three, four):
 
         except:
             opt(red + "x", "Something in the setup when wrong.")
+            raise
 
     if(two == "*"):
         name = input(r + "  [" + green + "*" + r +
@@ -171,37 +181,27 @@ def run(one, two, three, four):
         description = input("  ")
 
 
-def options1(one, two, three, four):
+def mainMenu():
     answer = ""
+    global user_options
     try:
         while(True):
             welcome()
-            print()
-            opt(one, "Make a Desktop Application")
-            opt(two, "Make a .deb file (DOESN'T WORK ON NFTS!)")
-            opt(three, "Compile your project into a .tar.xz/.zip file")
-            print()
             answer = input("  Please enter an input: ")
-            if(answer == "1"):
-                if(one == "*"):
-                    one = "-"
-                else:
-                    one = "*"
-                options1(one, two, three, four)
-                return
-            if(answer == "2"):
-                if(two == "*"):
-                    two = "-"
-                else:
-                    two = "*"
-                options1(one, two, three, four)
-                return
+            
             if(answer.lower() == "start"):
-                run(one, two, three, four)
-                return
-            else:
-                options1(one, two, three, four)
-                return
+                run()
+                break
+            try:
+                user_options.append(int(answer))
+                print(user_options)
+                time.sleep(1)
+            except:
+                print("ARE YOU RETARDED? tf is this? "+answer)
+                break
+               
+
+            
     except KeyboardInterrupt:
         print("\n")
         opt(red + "+", "Exiting...")
@@ -209,7 +209,8 @@ def options1(one, two, three, four):
     except:
         print()
         opt(red + "x", "Something went wrong. Sorry.")
-        exit()
+        raise
+     
 
 
-options1(one, two, three, four)
+mainMenu()
