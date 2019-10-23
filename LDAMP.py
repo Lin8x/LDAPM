@@ -2,6 +2,7 @@
 
 import os
 import time
+import sys
 
 user_options = []
 
@@ -41,17 +42,17 @@ br = '\33[108m'
 brown = '\33[33m'
 bwhite = '\33[107'
 
-
+# updates main menu options based on input
 def isSelected(value):
     if (value in user_options):
         return "X"
     return value
 
-
+# displays [value], string for main menu
 def opt(value, string):
     return r + "  [" + green + str(value) + r + "] " + string
 
-
+# displays the logo 
 def welcome():
     os.system("clear " * 5)
     print(r + """
@@ -71,29 +72,17 @@ def welcome():
 
   """ + r + "1st Developer: " + green + "lin8x" + r + " - " + ul + lcyan + "www.github.com/lin8x " + r +
           "\n  2nd Developer: " + green + "asian-code" + r + " - " + ul + lcyan + "www.github.com/asian-code" + r +
-          "\n  Select the options you would like to use, then type 'start' to continue:\n\n"+opt(isSelected("1"), "Make a Desktop Application\n") +
-          opt(isSelected("2"), "Make a .deb file (DOESN'T WORK ON NFTS!)\n") +
-          opt(isSelected("3"), "Compile your project into a .tar.xz/.zip file\n"))
+          "\n  Select the options you would like to use, then type 'start' to continue:\n\n"+opt(isSelected(1), "Make a Desktop Application\n") +
+          opt(isSelected(2), "Make a .deb file (DOESN'T WORK ON NFTS!)\n") +
+          opt(isSelected(3), "Compile your project into a .tar.xz/.zip file\n"))
 
 
 def run():
-    sysstuff = "Getting everything setup for you"
-    for i in range(0, 4):
-        welcome()
-        print()
-        opt(red + "+", sysstuff)
-        sysstuff = sysstuff + "."
-        time.sleep(1)
-    welcome()
-    print("\n" + r + "  ---  ---\n")
-
-    project = input(r + "  [" + green + "*" + r +
-                    "] Please enter your project name (project): ")
+    project = input(opt("*","Enter app name : "))
     if(project == ""):
         project = "project"
 
-    directory = input(r + "  [" + green + "*" + r +
-                      "] Please enter your project name directory (~/mystuff): ")
+    directory = input(opt("*","Please enter your project name directory (~/mystuff): "))
     if(directory == ""):
         directory = "~/mystuff"
 
@@ -186,31 +175,25 @@ def mainMenu():
     global user_options
     try:
         while(True):
+            os.system("clear")
             welcome()
-            answer = input("  Please enter an input: ")
-            
+            answer = input("\tPlease enter an input: ")
+
             if(answer.lower() == "start"):
                 run()
                 break
             try:
                 user_options.append(int(answer))
-                print(user_options)
-                time.sleep(1)
             except:
-                print("ARE YOU RETARDED? tf is this? "+answer)
-                break
-               
+                print(opt(red+"!","ARE YOU RETARDED? Not a number!  ("+answer+")"))
+                raise KeyboardInterrupt()
 
-            
     except KeyboardInterrupt:
-        print("\n")
-        opt(red + "+", "Exiting...")
-        exit()
+        print(opt(red + "!", "Exiting..."))
+        sys.exit()
     except:
-        print()
-        opt(red + "x", "Something went wrong. Sorry.")
+        print(opt(red + "!", "Something went wrong:"))
         raise
-     
 
 
 mainMenu()
