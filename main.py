@@ -74,57 +74,48 @@ def welcome():
           "\n  2nd Developer: " + green + "asian-code" + r + " - " + ul + lcyan + "www.github.com/asian-code" + r +
           "\n  Select the options you would like to use, then type 'start' to continue:\n\n"+opt(isSelected(1), "Make a Desktop Application\n") +
           opt(isSelected(2), "Make a .deb file (DOESN'T WORK ON NFTS!)\n") +
-          opt(isSelected(3), "Compile your project into a .tar.xz/.zip file\n"))
+          opt(isSelected(3), "Compile your name into a .tar.xz/.zip file\n"))
 
 
 def run():
-    project = input(opt("*","Enter app name : "))
-    if(project == ""):
-        project = "project"
-
-    directory = input(opt("*","Please enter your project name directory (~/mystuff): "))
+    #bash file name
+    name = input(opt("*","Enter app name : "))
+    if(name == ""):
+        name = "projects"
+    # folder location
+    directory = input(opt("*","enter your projects name directory (~/mystuff): "))
     if(directory == ""):
         directory = "~/mystuff"
-
-    script = input(r + "  [" + green + "*" + r + "] Please enter your script's directory (~/mystuff.py) \n   (FOR NON-INTERPRETER LANGUAGES, PUT THE DIRECTORY OF THE COMPILED EXECUTABLE!)\n  [" + green + "|" + r + "] Enter here: ")
+    # script to run/ write to bash file
+    script = input(opt("*","Please enter your script's directory (~/mystuff.py): "))
     if(script == ""):
         script = "~/mystuff.py"
+    # need to talk to DANISGAY about what its purpose
+    runscript = input(opt("*","Please enter the command in the terminal to run your tool\n (python3 mystuff.py)"))
 
-    runscript = input(r + "  [" + green + "*" + r +
-                      "] Please enter the command in the terminal to run your tool\n (python3 mystuff.py) (DO NOT PUT SUDO)\n  [" + green + "|" + r + "] Enter here: ")
-
-    if(one == "*"):
-        image = input(r + "  [" + green + "*" + r +
-                      "] Please enter your image/logo's directory (~/mystuff.ico): ")
+    if(1 in user_options):
+        # get location of icon image 
+        image = input(opt("*","Please enter your image/logo's directory (home/mystuff.ico): "))
         if(image == ""):
             image = "~/mystuff.ico"
-
-        terminal = input(
-            r + "  [" + green + "*" + r + "] Is your software run on a terminal? (y/n): ")
-        if(terminal.lower() == "y" or terminal.lower() == "yes"):
-            terminal = "true"
-
-        welcome()
-        sysstuff = "Packaging everything for you"
-        for i in range(0, 4):
-            welcome()
-            print()
-            opt(red + "+", sysstuff)
-            sysstuff = sysstuff + "."
-            time.sleep(1)
+        # determine if terminal runs when launching through desktop icon
+        terminal = input(opt("*", "Is your software run on a terminal? (y/n): "))
+        terminal = (terminal.lower() == "y" or terminal.lower() == "yes")
         try:
-
-            projectdir = project+"dir"
+            # NEED TO CHECK FOR USER INPUT TO INCREASE APPLICATION SECURITY
+            # app is using terminal commands which could be injected
+            #make sure name and dir input are characters only
+            projectdir = name+"dir"
 
             # makes the directory file
-            os.system("mkdir " + directory)
-            opt(red + "+", "Made " + directory)
+            #os.system("mkdir " + directory)
+            #opt(red + "+", "Made " + directory)
 
-            # makes the projectdir file
-            os.system("mkdir " + directory + "/" + projectdir)
-            opt(red + "+", "Made " + directory + "/" + project)
+            # makes the parentfolder with subfolder 
+            os.system("mkdir -p " + directory + "/" + projectdir)
+            print(opt(red + "+", "Made " + directory + "/" + name))
 
-            # moves the projectdir file into the directory file
+            # copies the script file into the directory 
             os.system("cp " + script + " " + directory + "/" + projectdir)
             opt(red + "+", "Moved " + script +
                 " to " + directory + "/" + projectdir)
@@ -133,23 +124,23 @@ def run():
             opt(red + "+", "Moved " + image +
                 " to " + directory + "/" + projectdir)
 
-            os.system("touch " + project)
-            opt(red + "+", "Made the batch file called " + project)
+            os.system("touch " + name)
+            opt(red + "+", "Made the batch file called " + name)
 
-            file = open(project, "a")
+            file = open(name, "a")
             file.write(runscript)
             file.close()
 
-            os.system("mv " + project + " " + directory)
-            opt(red + "+", "Moved " + project + " to " + directory)
+            os.system("mv " + name + " " + directory)
+            opt(red + "+", "Moved " + name + " to " + directory)
 
-            opt(red + "+", "Creating " + project + ".desktop (PRESS CNTRL + C)")
-            os.system("cat > " + project + ".desktop")
+            opt(red + "+", "Creating " + name + ".desktop (PRESS CNTRL + C)")
+            os.system("cat > " + name + ".desktop")
             print()
-            opt(red + "+", "Created " + project + ".desktop")
+            opt(red + "+", "Created " + name + ".desktop")
 
-            os.system("mv " + project + ".desktop " + directory)
-            opt(red + "+", "Moved " + project + ".desktop to " + directory)
+            os.system("mv " + name + ".desktop " + directory)
+            opt(red + "+", "Moved " + name + ".desktop to " + directory)
 
             # make it for .desktop file and then write stuff to it
             # make it write stuff to the bat file too
@@ -160,12 +151,12 @@ def run():
             opt(red + "x", "Something in the setup when wrong.")
             raise
 
-    if(two == "*"):
+    if(2 in user_options):
         name = input(r + "  [" + green + "*" + r +
                      "] Please enter your name (null): ")
         email = input(r + "  [" + green + "*" + r +
                       "] Please enter your email (N/A): ")
-        opt("*", "Please enter your project description: ")
+        opt("*", "Please enter your projects description: ")
         print("  (This is my custom linux application)")
         description = input("  ")
 
