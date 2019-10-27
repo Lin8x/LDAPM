@@ -157,7 +157,7 @@ def run():
           welcome()
           sum = sum + "."
           print(sum);
-          time.sleep(2)
+          time.sleep(0.5)
 
         try:
 
@@ -186,18 +186,26 @@ def run():
             print(opt(red + "+", "Moved " + image +" to " + directory + "/" + projectdir))
 
             #create bash file
+
             print(opt(red + "*", "Made the batch file called " + name))
 
             file = open(name, "a")
             file.write(runscript)
             file.close()
 
+            #moves the bash file into the folder
+
             os.system("mv " + name + " " + directory)
             print(opt(red + "*", "Moved " + name + " to " + directory))
+
+            #creates the desktop file
+            #ERIC WHY WOULD U REMOVE THIS, IT WORKS PERFECTLY. IF YOU CAN MAKE IT MORE EFFICIENT, DON'T DELETE IT, COMMENT IT OUT AT LEAST!
 
             print(opt(red + "*", "Creating " + name + ".desktop (PRESS CNTRL + C)"))
             os.system("cat > " + name + ".desktop")
             print("\n" + opt(red + "*", "Created " + name + ".desktop"))
+
+            #moves desktop file into the folder
 
             os.system("mv " + name + ".desktop " + directory)
             print(opt(red + "*", "Moved " + name + ".desktop to " + directory))
