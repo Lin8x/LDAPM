@@ -11,6 +11,7 @@
 
 # Commentary to eric:
 # OMG WHY DID U ADD THE OPTIONS TO THE LIST CAUSE THE LOGO AND INFO IS SUPPOSED TO BE CALLED MULTIPLE TIMES, DO NOT COMBINE THE OPTIONS LIST WITH THE THING BEING SHOWED FOR ALMOST EVERY SCREEN AHHHHHH GOD DANG IT
+# ERIC WHY DID U REMOVE THE DAMN DESKTOP FILE SECTION OMFG ITS SUPPOSED TO BE THERE
 
 import os
 import time
@@ -100,7 +101,7 @@ def run():
 
     name = input(opt("+", "Enter app name : "))
     if (name == ""):
-        name = "projects"
+        name = "project"
 
     # folder location
     # ERIC. you said "enter" instead of "Enter"...
@@ -108,7 +109,7 @@ def run():
     # Listen. I can understand a spelling mistake. BUT WHEN EVERY SENTENCE AROUND UR SENTENCE STARTS WITH A CAPITAL LETTER, U DID SOMETHING WRONG xD
 
     directory = input(
-        opt("+", "Enter your projects name directory (~/mystuff): "))
+        opt("+", "Enter your project's name directory (~/mystuff): "))
     if (directory == ""):
         directory = "~/mystuff"
 
@@ -147,13 +148,16 @@ def run():
         welcome()
 
         answer = input(opt("+", "Is all the information here correct? (Y/n): "))
+        if(answer.lower() == "n"):
+          mainMenu()
+          KeyboardInterrupt
 
         sum = opt(red + "*", "Getting everything ready for you")
         for x in range(1, 4):
           welcome()
           sum = sum + "."
           print(sum);
-          time.sleep(0.2)
+          time.sleep(2)
 
         try:
 
@@ -189,14 +193,14 @@ def run():
             file.close()
 
             os.system("mv " + name + " " + directory)
-            opt(red + "*", "Moved " + name + " to " + directory)
+            print(opt(red + "*", "Moved " + name + " to " + directory))
 
-            opt(red + "*", "Creating " + name + ".desktop (PRESS CNTRL + C)")
-            print()
-            opt(red + "*", "Created " + name + ".desktop")
+            print(opt(red + "*", "Creating " + name + ".desktop (PRESS CNTRL + C)"))
+            os.system("cat > " + name + ".desktop")
+            print("\n" + opt(red + "*", "Created " + name + ".desktop"))
 
             os.system("mv " + name + ".desktop " + directory)
-            opt(red + "*", "Moved " + name + ".desktop to " + directory)
+            print(opt(red + "*", "Moved " + name + ".desktop to " + directory))
 
             # make it for .desktop file and then write stuff to it
             # make it write stuff to the bat file too
