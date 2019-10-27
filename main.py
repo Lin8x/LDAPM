@@ -128,6 +128,7 @@ def displayInformation():
 
 
 def requestInformation():
+    global name,directory,script,image,isTerminal
     name = input(opt("+", "Enter app name : "))
     if (name == ""):
         name = "project"
@@ -260,8 +261,7 @@ def mainMenu():
         while (True):
             os.system("clear")
             logo()
-            print(
-                ul + "Select the options you would like to use, then type 'start' to continue:" + r + "\n")
+            print("Select the options you would like to use, then type 'start' to continue:\nTip: reselecting an option will deselect\n\n")
             print(opt(isSelected(1), "Make a Desktop Application"))
             print(opt(isSelected(2), "Make a .deb file (DOESN'T WORK ON NFTS!)"))
             print(opt(isSelected(3), "Compile your name into a .tar.xz/.zip file\n"))
