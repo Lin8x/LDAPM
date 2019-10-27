@@ -84,7 +84,7 @@ def resetInput():
 
 
 def opt(value, string):
-    return r + "  [" + str(value) + r + "] " + string
+    return r + "  [" + brown + str(value) + r + "] " + string
 
 # displays the logo
 
@@ -113,15 +113,14 @@ def logo():
 
 
 def displayInformation():
-    print('''
-            Input Table
-    --------------------------
-    |\tname\t=\t{}
-    |\tfolder\t=\t{}
-    |\tscript\t=\t{}
-    |\ticon\t=\t{}
-    |\tconsole\t=\t{}
-    --------------------------
+    print('''        Input Table
+  --------------------------
+  |\tname\t=\t{}
+  |\tfolder\t=\t{}
+  |\tscript\t=\t{}
+  |\ticon\t=\t{}
+  |\tconsole\t=\t{}
+  --------------------------
     '''.format(name, directory, script, image, str(isTerminal)))
 
 # request for the variable input and prompts if info is correct
@@ -261,7 +260,7 @@ def mainMenu():
         while (True):
             os.system("clear")
             logo()
-            print("Select the options you would like to use, then type 'start' to continue:\nTip: reselecting an option will deselect\n\n")
+            print("  " + ul + "Select the options you would like to use, then type 'start' to continue:" + r + "\n  Tip: reselecting an option will deselect\n")
             print(opt(isSelected(1), "Make a Desktop Application"))
             print(opt(isSelected(2), "Make a .deb file (DOESN'T WORK ON NFTS!)"))
             print(opt(isSelected(3), "Compile your name into a .tar.xz/.zip file\n"))
