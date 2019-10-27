@@ -1,7 +1,9 @@
 #!/usr/bin/python3
 
-#Update:
-# Make it so when the number is selected twice, its UNSELECTED
+# Please Update For Later:
+# Make it so when they user enters "start" with nothing selected, it won't run and will reload the menu (with the error message right below welcome())
+# Make it so when the number is selected twice, its UNSELECTED.
+# Make it so when the mainMenu() is called again, it RESETS everything selected
 # make it so when u answer all the information, it asks if all the information is correct, then does the animation
 # make it so all the * + - ! makes god damn sense:
 # # "*" Means proccess
@@ -220,16 +222,10 @@ def run():
         except:
             opt(red + "-", "Something in the setup when wrong.")
             raise
-'''
+
     if (2 in user_options):
-        name = input(r + "  [" + green + "*" + r +
-                     "] Please enter your name (null): ")
-        email = input(r + "  [" + green + "*" + r +
-                      "] Please enter your email (N/A): ")
-        print(opt("*", "Please enter your projects description: "))
-        print("  (This is my custom linux application)")
-        description = input("  ")
-        '''
+        d
+        
 
 
 def mainMenu():
