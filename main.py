@@ -1,13 +1,13 @@
 #!/usr/bin/python3
 
 # Please Update For Later:
-# Make it so when they user enters "start" with nothing selected, it won't run and will reload the menu (with the error message right below welcome())
+# Make it so when they user enters "start" with nothing selected, it won't run and will reload the menu (with the error message right below logo())
 # Make it so when the number is selected twice, its UNSELECTED.
 # Make it so when the mainMenu() is called again, it RESETS everything selected
 # make it so when u answer all the information, it asks if all the information is correct, then does the animation
 # make it so all the * + - ! makes god damn sense:
 # # "*" Means proccess / operation
-# # "!" Means for an error 
+# # "!" Means for an error
 # # "+" Means something is being added or listed (like the listed information when it asks if all the info is correct)
 # # "-" Means something really important is missing (like if a dependency isnt there)
 
@@ -20,7 +20,7 @@ import os
 import time
 import sys
 
-user_options = []
+user_options = []  # contains int values
 
 r = '\033[0m'  # reset
 bold = '\033[01m'
@@ -58,22 +58,38 @@ br = '\33[108m'
 brown = '\33[33m'
 bwhite = '\33[107'
 
+# variable for user input
+name = "test"
+directory = "test"
+script = "test"
+image = "test"
+isTerminal = True
 
-# updates main menu options based on input
 
 def isSelected(value):
     if (value in user_options):
-        return "X"
-    return value
+        return green+"X"
+    return r+str(value)
 
 # displays [value], string for main menu
 
+
+def resetInput():
+    global name, directory, script, image, isTerminal
+    name = ""
+    directory = ""
+    script = ""
+    image = ""
+    isTerminal = True
+
+
 def opt(value, string):
-    return r + "  [" + green + str(value) + r + "] " + string
+    return r + "  [" + str(value) + r + "] " + string
 
 # displays the logo
 
-def welcome():
+
+def logo():
     os.system("clear " * 5)
     print(r + """
      .---.
@@ -93,23 +109,30 @@ def welcome():
   """ + r + "1st Developer: " + green + "lin8x" + r + " - " + ul + lcyan + "www.github.com/lin8x " + r +
           "\n  2nd Developer: " + green + "asian-code" + r + " - " + ul + lcyan + "www.github.com/asian-code" + r + "\n")
 
-def run():
+# displays a table of all user inputs for variables
 
-    #Shows the damn welcome screen cause eric seriously has no idea how to make a design for any tool
-    #NO ONE WANTS TO LOOK AT A LIST OF A BUNCH OF STUFF, MAKE IT BETTER
 
-    welcome()
+def displayInformation():
+    print('''
+            Input Table
+    --------------------------
+    |\tname\t=\t{}
+    |\tfolder\t=\t{}
+    |\tscript\t=\t{}
+    |\ticon\t=\t{}
+    |\tconsole\t=\t{}
+    --------------------------
+    '''.format(name, directory, script, image, str(isTerminal)))
 
-    # bash file name
+# request for the variable input and prompts if info is correct
 
+
+def requestInformation():
     name = input(opt("+", "Enter app name : "))
     if (name == ""):
         name = "project"
 
     # folder location
-    # ERIC. you said "enter" instead of "Enter"...
-    # I swear I don't think you can even spell a sentence correctly, lol 
-    # Listen. I can understand a spelling mistake. BUT WHEN EVERY SENTENCE AROUND UR SENTENCE STARTS WITH A CAPITAL LETTER, U DID SOMETHING WRONG xD
 
     directory = input(
         opt("+", "Enter your project's name directory (~/mystuff): "))
@@ -123,48 +146,46 @@ def run():
     if (script == ""):
         script = "~/mystuff.py"
 
-    #This is used to enter the command into the bash file so it nows how to rub the program
+    image = input(
+        opt("+", "Please enter your image/logo's directory (home/mystuff.ico): "))
+    if (image == ""):
+        image = "~/mystuff.ico"
 
-    runscript = input(opt(
-        "+", "Please enter the command in the terminal to run your tool\n (python3 mystuff.py)"))
+    # determine if terminal runs when launching through the desktop icon file
 
-    #If 1 is isSelected
+    isTerminal = input(
+        opt("+", "Is your app run on a terminal? (y/n): "))
+    isTerminal = (isTerminal.lower() == "y" or isTerminal.lower() == "yes")
+
+    # This is used to enter the command into the bash file so it nows how to rub the program
+
+    # runscript = input(opt(
+    #     "+", "Please enter the command in the terminal to run your tool\n (python3 mystuff.py)"))
+
+    # asks user if all the information is correct (in case they mispelled something or whatever)
+    os.system("clear")
+    logo()
+    displayInformation()
+    answer = input(opt("+", "Is all the information here correct? (y/n): "))
+    if(answer.lower() == "y" or answer.lower() == "yes"):
+        return True
+    return False
+
+
+def process():
+    os.system("clear")
+    logo()
+    #get variable input until correct
+    iscorrect = False
+    while not iscorrect:
+        iscorrect = requestInformation()
+
+     # penguin animation here
+
 
     if (1 in user_options):
-
-        # get location of icon image
-
-        image = input(
-            opt("+", "Please enter your image/logo's directory (home/mystuff.ico): "))
-        if (image == ""):
-            image = "~/mystuff.ico"
-
-        # determine if terminal runs when launching through the desktop icon file
-
-        terminal = input(
-            opt("+", "Is your software run on a terminal? (y/n): "))
-        terminal = (terminal.lower() == "y" or terminal.lower() == "yes")
-        print()
-
-        #asks user if all the information is correct (in case they mispelled something or whatever)
-
-        welcome()
-
-        answer = input(opt("+", "Is all the information here correct? (Y/n): "))
-        if(answer.lower() == "n"):
-          mainMenu()
-          KeyboardInterrupt
-
-        sum = opt(red + "*", "Getting everything ready for you")
-        for x in range(1, 4):
-          welcome()
-          sum = sum + "."
-          print(sum);
-          time.sleep(0.5)
-
         try:
-
-            welcome()
+            logo()
 
             # NEED TO CHECK FOR USER INPUT TO INCREASE APPLICATION SECURITY
             # app is using terminal commands which could be injected
@@ -181,14 +202,16 @@ def run():
             # copies the script file into the directory
 
             os.system("cp " + script + " " + directory + "/" + projectdir)
-            print(opt(red + "*", "Moved " + script +" to " + directory + "/" + projectdir))
+            print(opt(red + "*", "Moved " + script +
+                      " to " + directory + "/" + projectdir))
 
             # copies the icon file to subfolder
 
             os.system("cp " + image + " " + directory + "/" + projectdir)
-            print(opt(red + "+", "Moved " + image +" to " + directory + "/" + projectdir))
+            print(opt(red + "+", "Moved " + image +
+                      " to " + directory + "/" + projectdir))
 
-            #create bash file
+            # create bash file
 
             print(opt(red + "*", "Made the batch file called " + name))
 
@@ -196,19 +219,19 @@ def run():
             file.write(runscript)
             file.close()
 
-            #moves the bash file into the folder
+            # moves the bash file into the folder
 
             os.system("mv " + name + " " + directory)
             print(opt(red + "*", "Moved " + name + " to " + directory))
 
-            #creates the desktop file
-            #ERIC WHY WOULD U REMOVE THIS, IT WORKS PERFECTLY. IF YOU CAN MAKE IT MORE EFFICIENT, DON'T DELETE IT, COMMENT IT OUT AT LEAST!
+            # creates the desktop file
+            # ERIC WHY WOULD U REMOVE THIS, IT WORKS PERFECTLY. IF YOU CAN MAKE IT MORE EFFICIENT, DON'T DELETE IT, COMMENT IT OUT AT LEAST!
 
             print(opt(red + "*", "Creating " + name + ".desktop (PRESS CNTRL + C)"))
             os.system("cat > " + name + ".desktop")
             print("\n" + opt(red + "*", "Created " + name + ".desktop"))
 
-            #moves desktop file into the folder
+            # moves desktop file into the folder
 
             os.system("mv " + name + ".desktop " + directory)
             print(opt(red + "*", "Moved " + name + ".desktop to " + directory))
@@ -218,49 +241,62 @@ def run():
             # https://formulae.brew.sh/formula/lynis#default
             # https://askubuntu.com/questions/90764/how-do-i-create-a-deb-package-for-a-single-python-script
 
-            #making stuff for loading screen plus asking if everything is ok
+            # making stuff for loading screen plus asking if everything is ok
 
         except:
             os.system("clear " * 5)
-            opt(red + "-", "LADPM: Something in the setup when wrong.")
+            opt(red + "!", "LADPM: Something in the setup when wrong.")
             raise
 
-    if (2 in user_options):
-        d
-        
+    # if (2 in user_options):
+    #     d
 
 
 def mainMenu():
     answer = ""
     global user_options
+
     try:
         while (True):
             os.system("clear")
-            welcome()
-            print(ul + "Select the options you would like to use, then type 'start' to continue:" + r + "\n")
+            logo()
+            print(
+                ul + "Select the options you would like to use, then type 'start' to continue:" + r + "\n")
             print(opt(isSelected(1), "Make a Desktop Application"))
-            print(opt(isSelected(2), "Make a .deb file (DOESN'T WORK ON NFTS!)")) 
+            print(opt(isSelected(2), "Make a .deb file (DOESN'T WORK ON NFTS!)"))
             print(opt(isSelected(3), "Compile your name into a .tar.xz/.zip file\n"))
-            answer = input("  Please enter an input: ")
+            print(opt(green+"start", "Start program"))
+            print(opt(red+"exit", "Quit program"))
+            print()
+
+            answer = input("Enter option: ")
 
             if (answer.lower() == "start"):
-                run()
+                process()
                 break
+            if(answer.lower() == "exit"):
+                raise KeyboardInterrupt()
             try:
-                user_options.append(int(answer))
+                answer = int(answer)
             except:
-                mainMenu()
-                break
+                print(opt("!", "Not a valid commmand"))
+
+            # remove selected
+            if(answer in user_options):
+                user_options.remove(answer)
+            else:
+                # add option
+                user_options.append(answer)
 
     except KeyboardInterrupt:
-      #Message for eric: if there is an error message, ALWAYS ALWAYS ALWAYS PLEASE ALWAYS CLEAR IT OR PRINT IT ON THE NEXT LINE
-        os.system("clear " * 5)
-        print(opt(red + "!", "LADPM: Exiting..."))
+        print(opt(green + "+", "LADPM: Exiting..."))
         sys.exit()
     except:
-        os.system("clear " * 5)
         print(opt(red + "!", "LADPM: Something went wrong."))
         raise
+    # recursion of mainmenu in case there is an error
+    resetInput()
+    mainMenu()
 
 
 mainMenu()
