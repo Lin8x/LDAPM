@@ -220,7 +220,8 @@ def run():
             #making stuff for loading screen plus asking if everything is ok
 
         except:
-            opt(red + "-", "Something in the setup when wrong.")
+            os.system("clear " * 5)
+            opt(red + "-", "LADPM: Something in the setup when wrong.")
             raise
 
     if (2 in user_options):
@@ -251,10 +252,13 @@ def mainMenu():
                 break
 
     except KeyboardInterrupt:
-        print(opt(red + "!", "Exiting..."))
+      #Message for eric: if there is an error message, ALWAYS ALWAYS ALWAYS PLEASE ALWAYS CLEAR IT OR PRINT IT ON THE NEXT LINE
+        os.system("clear " * 5)
+        print(opt(red + "!", "LADPM: Exiting..."))
         sys.exit()
     except:
-        print(opt(red + "!", "Something went wrong:"))
+        os.system("clear " * 5)
+        print(opt(red + "!", "LADPM: Something went wrong."))
         raise
 
 
