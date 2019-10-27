@@ -6,14 +6,15 @@
 # Make it so when the mainMenu() is called again, it RESETS everything selected
 # make it so when u answer all the information, it asks if all the information is correct, then does the animation
 # make it so all the * + - ! makes god damn sense:
-# # "*" Means proccess
+# # "*" Means proccess / operation
 # # "!" Means for an error 
 # # "+" Means something is being added or listed (like the listed information when it asks if all the info is correct)
 # # "-" Means something really important is missing (like if a dependency isnt there)
 
-# Commentary to eric:
+# Commentary to eric/asian-code:
 # OMG WHY DID U ADD THE OPTIONS TO THE LIST CAUSE THE LOGO AND INFO IS SUPPOSED TO BE CALLED MULTIPLE TIMES, DO NOT COMBINE THE OPTIONS LIST WITH THE THING BEING SHOWED FOR ALMOST EVERY SCREEN AHHHHHH GOD DANG IT
 # ERIC WHY DID U REMOVE THE DAMN DESKTOP FILE SECTION OMFG ITS SUPPOSED TO BE THERE
+# ERIC PLEASE MAKE EVERY ERROR U EVER MAKE START AT A NEW LINE OR CLEAR THE SCREEN, PREFERABLY THE LATTER.
 
 import os
 import time
