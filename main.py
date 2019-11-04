@@ -84,7 +84,7 @@ def resetInput():
 
 
 def opt(value, string):
-    return r + "  [" + str(value) + r + "] " + string
+    return r + "  [" + brown + str(value) + r + "] " + string
 
 # displays the logo
 
@@ -113,8 +113,7 @@ def logo():
 
 
 def displayInformation():
-    print('''
-            Input Table
+    print('''            Input Table
     --------------------------
     |\tname\t=\t{}
     |\tfolder\t=\t{}
@@ -160,8 +159,9 @@ def requestInformation():
 
     # This is used to enter the command into the bash file so it nows how to rub the program
 
-    # runscript = input(opt(
-    #     "+", "Please enter the command in the terminal to run your tool\n (python3 mystuff.py)"))
+    runscript = input(opt("+", "Please enter the command in the terminal to run your tool ('python3 ')\n"))
+    if(runscript == ""):
+      runscript = "./"
 
     # asks user if all the information is correct (in case they mispelled something or whatever)
     os.system("clear")
@@ -217,7 +217,7 @@ def process():
             print(opt(red + "*", "Made the batch file called " + name))
 
             file = open(name, "a")
-            file.write(runscript)
+            file.write("Hello")
             file.close()
 
             # moves the bash file into the folder
@@ -244,6 +244,9 @@ def process():
 
             # making stuff for loading screen plus asking if everything is ok
 
+            input("\n" + opt("*", "All processes finished. Please press enter to continue...") + invis)
+            print(r + "")
+
         except:
             os.system("clear " * 5)
             opt(red + "!", "LADPM: Something in the setup when wrong.")
@@ -261,7 +264,7 @@ def mainMenu():
         while (True):
             os.system("clear")
             logo()
-            print("Select the options you would like to use, then type 'start' to continue:\nTip: reselecting an option will deselect\n\n")
+            print(r + "  " + ul + "Select the an option, then type 'start' to continue:" + r + "\n  Tip: reselecting an option will deselect\n")
             print(opt(isSelected(1), "Make a Desktop Application"))
             print(opt(isSelected(2), "Make a .deb file (DOESN'T WORK ON NFTS!)"))
             print(opt(isSelected(3), "Compile your name into a .tar.xz/.zip file\n"))
@@ -269,7 +272,7 @@ def mainMenu():
             print(opt(red+"exit", "Quit program"))
             print()
 
-            answer = input("Enter option: ")
+            answer = input("  Enter option: ")
 
             if (answer.lower() == "start"):
                 process()
