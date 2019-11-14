@@ -69,7 +69,7 @@ isTerminal = True
 def isSelected(value):
     if (value in user_options):
         return green+"X"
-    return r+str(value)
+    return brown+str(value)
 
 # displays [value], string for main menu
 
@@ -111,7 +111,6 @@ def logo():
 
 # displays a table of all user inputs for variables
 
-
 def displayInformation():
     print('''            Input Table
     --------------------------
@@ -121,56 +120,76 @@ def displayInformation():
     |\ticon\t=\t{}
     |\tconsole\t=\t{}
     --------------------------
-    '''.format(name, directory, script, image, str(isTerminal)))
+    '''.format(name, directory, script, icon, str(isTerminal)))
 
 # request for the variable input and prompts if info is correct
 
-
 def requestInformation():
-    global name,directory,script,image,isTerminal
+    # makes these things global
+
+    global name,directory,script,icon,isTerminal
+
+    # asks for name of app
+
     name = input(opt("+", "Enter app name : "))
     if (name == ""):
-        name = "project"
+        name = "appname"
 
-    # folder location
+    # folder location for every project item
 
-    directory = input(
-        opt("+", "Enter your project's name directory (~/mystuff): "))
+    print(opt("!", "(THIS FOLDER SHOULD CONTAIN ALL YOUR PROJECT FILES INSIDE IT!)"))
+    directory = input(opt("+", "Enter your project's directory (~/myproject): "))
     if (directory == ""):
-        directory = "~/mystuff"
+        directory = "~/myproject"
 
     # script to run/ write to bash file
 
     script = input(
-        opt("+", "Please enter your script's directory (~/mystuff.py): "))
+        opt("+", "Please enter your main script name.file (mystuff.py): "))
     if (script == ""):
-        script = "~/mystuff.py"
+        script = "mystuff.py"
 
-    image = input(
-        opt("+", "Please enter your image/logo's directory (home/mystuff.ico): "))
-    if (image == ""):
-        image = "~/mystuff.ico"
+    if (1 in user_options):
 
-    # determine if terminal runs when launching through the desktop icon file
+      # icon image inside the folder so we can link it to .desktop file
 
-    isTerminal = input(
-        opt("+", "Is your app run on a terminal? (y/n): "))
-    isTerminal = (isTerminal.lower() == "y" or isTerminal.lower() == "yes")
+      print(opt("!", "(THIS ICON IMAGE SHOULD ALREADY BE IN YOUR PROJECT FOLDER)"))
+      icon = input(opt("+", "Enter your project's directory (mystuff.ico): "))
+      if (icon == ""):
+          icon = "mystuff.ico"
 
-    # This is used to enter the command into the bash file so it nows how to rub the program
+      # determine if terminal runs when launching through the desktop icon file
 
-    runscript = input(opt("+", "Please enter the command in the terminal to run your tool ('python3 ')\n"))
-    if(runscript == ""):
-      runscript = "./"
+      isTerminal = input(
+          opt("+", "Is your app run on a terminal? (y/n): "))
+      isTerminal = (isTerminal.lower() == "y" or isTerminal.lower() == "yes")
 
-    # asks user if all the information is correct (in case they mispelled something or whatever)
-    os.system("clear")
-    logo()
-    displayInformation()
-    answer = input(opt("+", "Is all the information here correct? (y/n): "))
-    if(answer.lower() == "y" or answer.lower() == "yes"):
-        return True
-    return False
+      # This is used to enter the command into the bash file so it nows how to rub the program
+
+      runscript = input(opt("+", "Please enter the command in the terminal to run your tool ('python3 ')\n  "))
+      if(runscript == ""):
+        runscript = "./"
+
+      # asks user if all the information is correct (in case they mispelled something or whatever)
+      os.system("clear")
+      logo()
+      displayInformation()
+      answer = input(opt("+", "Is all the information here correct? (y/n): "))
+      if(answer.lower() == "y" or answer.lower() == "yes"):
+          return True
+      return False
+    
+    elif (2 in user_options):
+      exit()
+
+    elif (3 in user_options):
+      exit()
+
+    else:
+      os.system("clear * 5")
+      input(opt(red + "!", "LADPM: Error. You didn't select any option.   " + invis))
+      print(r)
+      raise KeyboardInterrupt()
 
 
 def process():
@@ -192,25 +211,20 @@ def process():
             # app is using terminal commands which could be injected
             # make sure name and dir input are characters only
             projectdir = name + "dir"
+            #directory is the name of the folder
 
             # makes the directory file
             # os.system("mkdir " + directory)
             # opt(red + "+", "Made " + directory)
 
-            os.system("mkdir -p " + directory + "/" + projectdir)
-            print(opt(red + "*", "Made " + directory + "/" + name))
+            print(opt("*", "Making " + name + " files...\n"))
 
-            # copies the script file into the directory
+            os.system("mkdir -p " + projectdir)
+            print(opt(red + "*", "Made " + projectdir))
 
-            os.system("cp " + script + " " + directory + "/" + projectdir)
-            print(opt(red + "*", "Moved " + script +
-                      " to " + directory + "/" + projectdir))
-
-            # copies the icon file to subfolder
-
-            os.system("cp " + image + " " + directory + "/" + projectdir)
-            print(opt(red + "+", "Moved " + image +
-                      " to " + directory + "/" + projectdir))
+            os.system("cp -r " + directory + " " + projectdir)
+            print(opt(red + "*", "Copied " + directory +
+                      " to " + projectdir))
 
             # create bash file
 
@@ -222,20 +236,33 @@ def process():
 
             # moves the bash file into the folder
 
-            os.system("mv " + name + " " + directory)
-            print(opt(red + "*", "Moved " + name + " to " + directory))
+            os.system("mv " + name + " " + projectdir)
+            print(opt(red + "*", "Moved " + name + " to " + projectdir))
+
+            # create setup file
+
+            print(opt(red + "*", "Made the setup file called setup" + name + ".sh"))
+
+            file = open("setup" + name + ".sh", "a")
+            file.write("Hello")
+            file.close()
+
+            # moves the bash file into the folder
+
+            os.system("mv setup" + name + ".sh " + projectdir)
+            print(opt(red + "*", "Moved setup" + name + ".sh to " + projectdir))
 
             # creates the desktop file
-            # ERIC WHY WOULD U REMOVE THIS, IT WORKS PERFECTLY. IF YOU CAN MAKE IT MORE EFFICIENT, DON'T DELETE IT, COMMENT IT OUT AT LEAST!
 
-            print(opt(red + "*", "Creating " + name + ".desktop (PRESS CNTRL + C)"))
-            os.system("cat > " + name + ".desktop")
-            print("\n" + opt(red + "*", "Created " + name + ".desktop"))
+            #print(opt(red + "*", "Creating " + name + ".desktop (PRESS CNTRL + C)"))
+            #os.system("cat > " + name + ".desktop")
+            os.system("touch " + name + ".desktop")
+            print(opt(red + "*", "Created " + name + ".desktop"))
 
             # moves desktop file into the folder
 
-            os.system("mv " + name + ".desktop " + directory)
-            print(opt(red + "*", "Moved " + name + ".desktop to " + directory))
+            os.system("mv " + name + ".desktop " + projectdir)
+            print(opt(red + "*", "Moved " + name + ".desktop to " + projectdir))
 
             # make it for .desktop file and then write stuff to it
             # make it write stuff to the bat file too
@@ -292,6 +319,7 @@ def mainMenu():
                 user_options.append(answer)
 
     except KeyboardInterrupt:
+        os.system("clear * 5")
         print(opt(green + "+", "LADPM: Exiting..."))
         sys.exit()
     except:
@@ -300,6 +328,5 @@ def mainMenu():
     # recursion of mainmenu in case there is an error
     resetInput()
     mainMenu()
-
 
 mainMenu()
