@@ -58,7 +58,7 @@ br = '\33[108m'
 brown = '\33[33m'
 bwhite = '\33[107'
 
-# variable for user input
+# global variables for user input
 name = "test"
 directory = "test"
 script = "test"
@@ -80,6 +80,12 @@ def resetInput():
     directory = ""
     script = ""
     image = ""
+    version = ""
+    maintainer = ""
+    description = ""
+    arch = ""
+    depends = ""
+    
     isTerminal = True
 
 
@@ -111,7 +117,7 @@ def logo():
 
 # displays a table of all user inputs for variables
 
-def displayInformation():
+def displayInformationOne():
     print('''            Input Table
     --------------------------
     |\tname\t=\t{}
@@ -122,12 +128,33 @@ def displayInformation():
     --------------------------
     '''.format(name, directory, script, icon, str(isTerminal)))
 
+def displayInformationTwo():
+  print('''            Input Table
+    --------------------------------
+    |\tname        \t=\t{}
+    |\tfolder      \t=\t{}
+    |\tscript      \t=\t{}
+    |\tversion     \t=\t{}
+    |\tmaintainer  \t=\t{}
+    |\thomepage    \t=\t{}
+    |\tdescription \t=\t{}
+    |\tarchitecture\t=\t{}
+    |\tdependencies\t=\t{}
+    --------------------------------
+    '''.format(name, directory, script, version, maintainer, homepage, description, arch, depends))
+
 # request for the variable input and prompts if info is correct
 
 def requestInformation():
     # makes these things global
 
-    global name,directory,script,icon,isTerminal
+    #For all options: name, directory, script
+    #For option 1: icon, isTerminal
+    #For option 2: version, arch, maintainer, depends, homepage, description
+    global name,directory,script,icon,isTerminal, version,arch,maintainer,depends,homepage,description
+
+    if not user_options:
+      KeyboardInterrupt()
 
     # asks for name of app
 
@@ -141,11 +168,8 @@ def requestInformation():
     directory = input(opt("+", "Enter your project's directory (~/myproject): "))
     if (directory == ""):
         directory = "~/myproject"
-
     # script to run/ write to bash file
-
-    script = input(
-        opt("+", "Please enter your main script name.file (mystuff.py): "))
+    script = input(opt("+", "Please enter youhttps://repl.it/join/maqwlvdy-danj1r main script name.file (mystuff.py): "))
     if (script == ""):
         script = "mystuff.py"
 
@@ -161,7 +185,7 @@ def requestInformation():
       # determine if terminal runs when launching through the desktop icon file
 
       isTerminal = input(
-          opt("+", "Is your app run on a terminal? (y/n): "))
+          opt("+", "Does your app run on a terminal? (y/n): "))
       isTerminal = (isTerminal.lower() == "y" or isTerminal.lower() == "yes")
 
       # This is used to enter the command into the bash file so it nows how to rub the program
@@ -171,16 +195,60 @@ def requestInformation():
         runscript = "./"
 
       # asks user if all the information is correct (in case they mispelled something or whatever)
+
       os.system("clear")
       logo()
-      displayInformation()
+      displayInformationOne()
       answer = input(opt("+", "Is all the information here correct? (y/n): "))
       if(answer.lower() == "y" or answer.lower() == "yes"):
           return True
       return False
     
     elif (2 in user_options):
-      exit()
+      #For option 2: version, arch, maintainer, depends, homepage, description
+
+      #Asks for version name
+
+      version = input(opt("+", "Please enter the version of your application/program (1.0): "))
+      if(version == ""):
+        version = "1.0"
+
+      #Asks for maintainer information
+
+      maintainer = input(opt("+", "Please enter your maintainer information (Jane Doe <Email@notgiven.com>): "))
+      if(maintainer == ""):
+        maintainer = "Jane Doe <Email@notgiven.com>"
+
+      #asks for homepage
+
+      homepage = input(opt("+", "Please enter your homepage/github link (http://www.github.com/): "))
+      if(homepage == ""):
+        homepage = "www.github.com"
+
+      #asks for description
+
+      description = input(opt("+", "Please enter a description of your tool in one sentence (Just a simple program!): " + "\n  "))
+      if(description == ""):
+        description = "Just a simple program!"
+
+      #Asks for architecture type
+      
+      arch = input(opt("+", "Please enter your architecture type (all): "))
+      if(arch == ""):
+        arch = "all"
+
+      #asks for dependencies
+
+      depends = input(opt("+", "Please enter your tool/program's dependencies (python3.6): "))
+      if(depends == ""):
+        depends = "python3.6"
+      
+      logo()
+      displayInformationTwo()
+      answer = input(opt("+", "Is all the information here correct? (y/n): "))
+      if(answer.lower() == "y" or answer.lower() == "yes"):
+          return True
+      return False
 
     elif (3 in user_options):
       exit()
@@ -201,7 +269,6 @@ def process():
         iscorrect = requestInformation()
 
      # penguin animation here
-
 
     if (1 in user_options):
         try:
@@ -279,8 +346,25 @@ def process():
             opt(red + "!", "LADPM: Something in the setup when wrong.")
             raise
 
-    # if (2 in user_options):
-    #     d
+    if (2 in user_options):
+        logo()
+
+        projectdeb = name + "debfile"
+
+        os.system("mkdir -p " + projectdeb + "/DEBIAN")
+        print(opt(red + "*", "Made " + projectdeb + "/DEBIAN"))
+
+        os.system("mkdir -p " + projectdeb + "/usr/bin")
+        print(opt(red + "*", "Made " + projectdeb + "/usr/bin"))
+
+        os.system("touch control")
+        print(opt(red + "*", "Made control file"))
+
+        os.system("mv control " + projectdeb + "/DEBIAN/")
+        print(opt(red + "*", "Made " + projectdeb + "/DEBIAN/control"))
+
+        input("\n" + opt(red + "*", "All processes finished. Please press enter to continue...") + invis)
+        print(r + "")
 
 
 def mainMenu():
@@ -315,7 +399,7 @@ def mainMenu():
             if(answer in user_options):
                 user_options.remove(answer)
             else:
-                # add option
+                # add optionhttps://ttsreader.com/
                 user_options.append(answer)
 
     except KeyboardInterrupt:
