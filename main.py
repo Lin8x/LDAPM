@@ -11,11 +11,6 @@
 # # "+" Means something is being added or listed (like the listed information when it asks if all the info is correct)
 # # "-" Means something really important is missing (like if a dependency isnt there)
 
-# Commentary to eric/asian-code:
-# OMG WHY DID U ADD THE OPTIONS TO THE LIST CAUSE THE LOGO AND INFO IS SUPPOSED TO BE CALLED MULTIPLE TIMES, DO NOT COMBINE THE OPTIONS LIST WITH THE THING BEING SHOWED FOR ALMOST EVERY SCREEN AHHHHHH GOD DANG IT
-# ERIC WHY DID U REMOVE THE DAMN DESKTOP FILE SECTION OMFG ITS SUPPOSED TO BE THERE
-# ERIC PLEASE MAKE EVERY ERROR U EVER MAKE START AT A NEW LINE OR CLEAR THE SCREEN, PREFERABLY THE LATTER.
-
 import os
 import time
 import sys
@@ -96,7 +91,7 @@ def opt(value, string):
 
 
 def logo():
-    os.system("clear " * 5)
+    os.system("clear")
     print(r + """
      .---.
     /     \\
@@ -129,6 +124,7 @@ def displayInformationOne():
     '''.format(name, directory, script, icon, str(isTerminal)))
 
 def displayInformationTwo():
+  print("Please read the debian packages guidelines to ensure your program follows the social contract: " + lcyan + ul + "https://www.debian.org/social_contract#guidelines" + r + "\n")
   print('''            Input Table
     --------------------------------
     |\tname        \t=\t{}
@@ -169,7 +165,7 @@ def requestInformation():
     if (directory == ""):
         directory = "~/myproject"
     # script to run/ write to bash file
-    script = input(opt("+", "Please enter youhttps://repl.it/join/maqwlvdy-danj1r main script name.file (mystuff.py): "))
+    script = input(opt("+", "Please enter your main script name.file (mystuff.py): "))
     if (script == ""):
         script = "mystuff.py"
 
@@ -239,9 +235,9 @@ def requestInformation():
 
       #asks for dependencies
 
-      depends = input(opt("+", "Please enter your tool/program's dependencies (python3.6): "))
+      depends = input(opt("+", "Please enter your tool/program's dependencies (python3): "))
       if(depends == ""):
-        depends = "python3.6"
+        depends = "python3"
       
       logo()
       displayInformationTwo()
@@ -254,7 +250,7 @@ def requestInformation():
       exit()
 
     else:
-      os.system("clear * 5")
+      os.system("clear")
       input(opt(red + "!", "LADPM: Error. You didn't select any option.   " + invis))
       print(r)
       raise KeyboardInterrupt()
@@ -342,7 +338,7 @@ def process():
             print(r + "")
 
         except:
-            os.system("clear " * 5)
+            os.system("clear")
             opt(red + "!", "LADPM: Something in the setup when wrong.")
             raise
 
@@ -360,8 +356,33 @@ def process():
         os.system("touch control")
         print(opt(red + "*", "Made control file"))
 
+        #name, directory, script, version, maintainer, homepage, description, arch, depends
+        #writes all configurations to the control file
+        #print("Package: linuxconfig\nVersion: 1.0\nSection: custom\nPriority: optional\nArchitecture: all\nEssential: no\nInstalled-Size: 1024\nMaintainer: linuxconfig.org\nDescription: Print linuxconfig.org on the screen")
+
+        #input("\n" + opt(red + "*", "Copy and paste the following into the control file. Please press enter to continue once done...") + invis)
+        
+        print(r + "")
+
         os.system("mv control " + projectdeb + "/DEBIAN/")
         print(opt(red + "*", "Made " + projectdeb + "/DEBIAN/control"))
+
+        #Writing to file
+        cf = open(projectdeb + "/DEBIAN/control", "wb")
+        
+        cf.write("Package: " + name + "\nVersion: " + version + "\nMaintainer: " + maintainer + "\nDescription: " + description + "\nArchitecture: " + arch + "\nDepends: " + depends)
+        cf.close()
+        print(opt(red + "*", "Sucessfully entered information in " + projectdeb + "/DEBIAN/control"))
+
+        os.system("cp " + directory + "/" + script + " " + projectdeb + "/usr/bin")
+        print(opt(red + "*", "Copied " + directory + "/" + script + " to " + projectdeb + "/usr/bin"))
+
+        try:
+          #os.system("dpkg-deb --build " + projectdeb)
+          os.system("dpkg-deb --build " + projectdeb + " " + name+"_"+version+"_"+arch+".deb")
+          #sudo dpkg -b appnamedebfile appnamedebfile.deb
+        except:
+          print(opt(red + "!", "LDAPM: Error! Could not use dpkg! Is it installed?"))
 
         input("\n" + opt(red + "*", "All processes finished. Please press enter to continue...") + invis)
         print(r + "")
@@ -403,7 +424,7 @@ def mainMenu():
                 user_options.append(answer)
 
     except KeyboardInterrupt:
-        os.system("clear * 5")
+        os.system("clear")
         print(opt(green + "+", "LADPM: Exiting..."))
         sys.exit()
     except:
