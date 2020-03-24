@@ -1,15 +1,7 @@
 #!/usr/bin/python3
 
-# Please Update For Later:
-# Make it so when they user enters "start" with nothing selected, it won't run and will reload the menu (with the error message right below logo())
-# Make it so when the number is selected twice, its UNSELECTED.
-# Make it so when the mainMenu() is called again, it RESETS everything selected
-# make it so when u answer all the information, it asks if all the information is correct, then does the animation
-# make it so all the * + - ! makes god damn sense:
-# # "*" Means proccess / operation
-# # "!" Means for an error
-# # "+" Means something is being added or listed (like the listed information when it asks if all the info is correct)
-# # "-" Means something really important is missing (like if a dependency isnt there)
+# MADE MY DANIEL / LIN8X AND REQUIRES CREDIT IN ORDER TO USE!
+# Please, I spent alot of time into this :)
 
 import os
 import time
@@ -59,6 +51,7 @@ directory = "test"
 script = "test"
 image = "test"
 isTerminal = True
+runscript = "test"
 
 
 def isSelected(value):
@@ -80,7 +73,7 @@ def resetInput():
     description = ""
     arch = ""
     depends = ""
-    
+    runscript = ""
     isTerminal = True
 
 
@@ -97,7 +90,7 @@ def logo():
     /     \\
     \\.@-@./
     /`\_/`\\
-   //  _  /\\
+   //  _  /\\ """ + brown + "\t BETA: Version 0.1" + white + """
   | \     )|\\""" + brown + " \t _____________________________")
     print(""" ▒▒▒▒▒▒▒▒▒▒▒▒▒▒\t   _    ___   _   ___ __  __
  ▒▒▒▒▒▒▒▒▒▒▒▒▒▒\t  | |  |   \ /_\ | _ \  \/  |
@@ -120,8 +113,9 @@ def displayInformationOne():
     |\tscript\t=\t{}
     |\ticon\t=\t{}
     |\tconsole\t=\t{}
+    |\tcommand\t=\t{}
     --------------------------
-    '''.format(name, directory, script, icon, str(isTerminal)))
+    '''.format(name, directory, script, icon, str(isTerminal),runscript))
 
 def displayInformationTwo():
   print("Please read the debian packages guidelines to ensure your program follows the social contract: " + lcyan + ul + "https://www.debian.org/social_contract#guidelines" + r + "\n")
@@ -135,9 +129,10 @@ def displayInformationTwo():
     |\thomepage    \t=\t{}
     |\tdescription \t=\t{}
     |\tarchitecture\t=\t{}
-    |\tdependencies\t=\t{}
+    |\tdepends\t\t\t=\t{}
     --------------------------------
     '''.format(name, directory, script, version, maintainer, homepage, description, arch, depends))
+    #format(name, directory, script, version, maintainer, homepage, description, arch, depends))
 
 # request for the variable input and prompts if info is correct
 
@@ -147,10 +142,13 @@ def requestInformation():
     #For all options: name, directory, script
     #For option 1: icon, isTerminal
     #For option 2: version, arch, maintainer, depends, homepage, description
-    global name,directory,script,icon,isTerminal, version,arch,maintainer,depends,homepage,description
+    global name,directory,script,icon,isTerminal,runscript,version,arch,maintainer,depends,homepage,description
 
     if not user_options:
       KeyboardInterrupt()
+
+    if(1 not in user_options and 2 not in user_options and 3 in user_options):
+      return True
 
     # asks for name of app
 
@@ -161,11 +159,11 @@ def requestInformation():
     # folder location for every project item
 
     print(opt("!", "(THIS FOLDER SHOULD CONTAIN ALL YOUR PROJECT FILES INSIDE IT!)"))
-    directory = input(opt("+", "Enter your project's directory (~/myproject): "))
+    directory = input(opt("+", "Enter your project's directory (/myproject): "))
     if (directory == ""):
-        directory = "~/myproject"
-    # script to run/ write to bash file
-    script = input(opt("+", "Please enter your main script name.file (mystuff.py): "))
+        directory = "myproject"
+    # script to run/ writrune to bash file
+    script = input(opt("+", "Please enter your main script file (mystuff.py): "))
     if (script == ""):
         script = "mystuff.py"
 
@@ -179,16 +177,17 @@ def requestInformation():
           icon = "mystuff.ico"
 
       # determine if terminal runs when launching through the desktop icon file
-
       isTerminal = input(
           opt("+", "Does your app run on a terminal? (y/n): "))
       isTerminal = (isTerminal.lower() == "y" or isTerminal.lower() == "yes")
 
       # This is used to enter the command into the bash file so it nows how to rub the program
 
-      runscript = input(opt("+", "Please enter the command in the terminal to run your tool ('python3 ')\n  "))
+      runscript = input(opt("+", "Please enter the command in the terminal to run your tool ('python3', 'java', 'perl', etc)\n  "))
       if(runscript == ""):
-        runscript = "./"
+        runscript = "python3"
+      #if(""):
+        #runscript.remove("/", "")
 
       # asks user if all the information is correct (in case they mispelled something or whatever)
 
@@ -205,7 +204,7 @@ def requestInformation():
 
       #Asks for version name
 
-      version = input(opt("+", "Please enter the version of your application/program (1.0): "))
+      version = input(opt("+", "Please enter the version of your launcher (1.0): "))
       if(version == ""):
         version = "1.0"
 
@@ -229,15 +228,16 @@ def requestInformation():
 
       #Asks for architecture type
       
+      print(opt(red + "*", "LEAVE EMPTY IF YOU DON'T KNOW WHAT YOU'RE DOING!"))
       arch = input(opt("+", "Please enter your architecture type (all): "))
       if(arch == ""):
         arch = "all"
 
       #asks for dependencies
 
-      depends = input(opt("+", "Please enter your tool/program's dependencies (python3): "))
+      depends = input(opt("+", "Please enter your tool/program's dependencies (${misc:Depends}, ${python3:Depends}): "))
       if(depends == ""):
-        depends = "python3"
+        depends = "${misc:Depends}, ${python3:Depends}"
       
       logo()
       displayInformationTwo()
@@ -247,7 +247,7 @@ def requestInformation():
       return False
 
     elif (3 in user_options):
-      exit()
+      return True
 
     else:
       os.system("clear")
@@ -274,6 +274,10 @@ def process():
             # app is using terminal commands which could be injected
             # make sure name and dir input are characters only
             projectdir = name + "dir"
+            if("/" in directory):
+              directory.replace("/", "")
+            if("~" in directory):
+              directory.replace("~")
             #directory is the name of the folder
 
             # makes the directory file
@@ -294,7 +298,7 @@ def process():
             print(opt(red + "*", "Made the batch file called " + name))
 
             file = open(name, "a")
-            file.write("Hello")
+            file.write("sudo " + runscript + " /opt/" + directory + "/" + script)
             file.close()
 
             # moves the bash file into the folder
@@ -307,7 +311,14 @@ def process():
             print(opt(red + "*", "Made the setup file called setup" + name + ".sh"))
 
             file = open("setup" + name + ".sh", "a")
-            file.write("Hello")
+            # moves the .desktop file to act like a real application
+            file.write("sudo mv " + name + ".desktop" + " /usr/share/applications")
+
+            # moves all necessary files to /opt/
+
+            file.write(" sudo mv " + directory + " /opt/")
+            # allows you to run the application by name in the terminal
+            file.write(" sudo mv " + name + " /usr/bin")
             file.close()
 
             # moves the bash file into the folder
@@ -319,14 +330,25 @@ def process():
 
             #print(opt(red + "*", "Creating " + name + ".desktop (PRESS CNTRL + C)"))
             #os.system("cat > " + name + ".desktop")
+
             os.system("touch " + name + ".desktop")
             print(opt(red + "*", "Created " + name + ".desktop"))
+            file = open(name + ".desktop", "a")
+            # the reason i did this is so its easier to read in code
+            file.write("[Desktop Entry]")
+            file.write("\nEncoding=UTF-8")
+            file.write("\nVersion=1.0")
+            file.write("\nType=Application")
+            file.write("\nTerminal=" + str(isTerminal).lower())
+            file.write("\nExec=" + name)
+            file.write("\nName=" + name)
+            file.write("\nIcon=/opt/" + directory + "/" + icon)
+            file.close()
 
             # moves desktop file into the folder
 
             os.system("mv " + name + ".desktop " + projectdir)
             print(opt(red + "*", "Moved " + name + ".desktop to " + projectdir))
-
             # make it for .desktop file and then write stuff to it
             # make it write stuff to the bat file too
             # https://formulae.brew.sh/formula/lynis#default
@@ -343,6 +365,9 @@ def process():
             raise
 
     if (2 in user_options):
+        if (1 in user_options):
+          user_options.remove(1)
+          process()
         logo()
 
         projectdeb = name + "debfile"
@@ -368,7 +393,7 @@ def process():
         print(opt(red + "*", "Made " + projectdeb + "/DEBIAN/control"))
 
         #Writing to file
-        cf = open(projectdeb + "/DEBIAN/control", "wb")
+        cf = open(projectdeb + "/DEBIAN/control", "a")
         
         cf.write("Package: " + name + "\nVersion: " + version + "\nMaintainer: " + maintainer + "\nDescription: " + description + "\nArchitecture: " + arch + "\nDepends: " + depends)
         cf.close()
@@ -379,11 +404,30 @@ def process():
 
         try:
           #os.system("dpkg-deb --build " + projectdeb)
-          os.system("dpkg-deb --build " + projectdeb + " " + name+"_"+version+"_"+arch+".deb")
+          #os.system("dpkg-deb --build " + projectdeb + " " + name+"_"+version+"_"+arch+".deb")
           #sudo dpkg -b appnamedebfile appnamedebfile.deb
+          print(opt(red+ "DEV MESSAGE","As of right now, there is no automatic solution that I could find that automatically makes the .deb file."))
+          print(opt(red + "STEP 1", "Please re-copy and paste the information in " + projectdeb + "/DEBIAN/control"))
+          print(opt(red + "STEP 2", "Then do 'dpkg -b " + projectdeb))
         except:
           print(opt(red + "!", "LDAPM: Error! Could not use dpkg! Is it installed?"))
 
+        input("\n" + opt(red + "*", "All processes finished. Please press enter to continue...") + invis)
+        print(r + "")
+
+    if (3 in user_options):
+        logo()
+        filename = input(opt(red + "+", "Please enter the directory where your entire project is stored: "))
+        choose = input(opt(red + "+", "Please pick either zip or tar format (z/t): "))
+        if(choose.lower() == "z"):
+          os.system("zip -r " + filename + ".zip " + filename)
+          print(opt(red + "*", "Made " + filename + ".zip"))
+        else:
+          os.system("tar cf - " + filename + " | xz -z - > " + filename + ".tar.xz")
+          print(opt(red + "*", "Made " + filename + ".tar.xz"))
+        # tar cf - directory/ | xz -z - > directory.tar.xz
+
+        user_options.remove(3)
         input("\n" + opt(red + "*", "All processes finished. Please press enter to continue...") + invis)
         print(r + "")
 
@@ -399,7 +443,7 @@ def mainMenu():
             print(r + "  " + ul + "Select the an option, then type 'start' to continue:" + r + "\n  Tip: reselecting an option will deselect\n")
             print(opt(isSelected(1), "Make a Desktop Application"))
             print(opt(isSelected(2), "Make a .deb file (DOESN'T WORK ON NFTS!)"))
-            print(opt(isSelected(3), "Compile your name into a .tar.xz/.zip file\n"))
+            print(opt(isSelected(3), "Compile your name into a .tar.xz/.zip file (REQUIRES ZIP AND/OR TAR!)\n"))
             print(opt(green+"start", "Start program"))
             print(opt(red+"exit", "Quit program"))
             print()
