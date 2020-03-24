@@ -316,9 +316,9 @@ def process():
 
             # moves all necessary files to /opt/
 
-            file.write(" sudo mv " + directory + " /opt/")
+            file.write(" && sudo mv " + directory + " /opt/")
             # allows you to run the application by name in the terminal
-            file.write(" sudo mv " + name + " /usr/bin")
+            file.write(" && sudo mv " + name + " /usr/bin")
             file.close()
 
             # moves the bash file into the folder
